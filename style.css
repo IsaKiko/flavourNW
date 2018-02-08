@@ -2,14 +2,14 @@
 * { box-sizing: border-box; }
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size: 200;
+  font-size: 10;
   color: #666;
 }
 /* STRUCTURE */
 .wrapper {
  padding: 5px;
- max-width: 960px;
- width: 95%;
+ /*max-width: 960px;*/
+ width: 90%;
  margin: 20px auto;
 }
 header {
