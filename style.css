@@ -23,7 +23,7 @@ header {
 }
 .column {
  flex: 1;
- border: 1px solid gray;
+ /*border: 1px solid gray;*/
  margin: 2px;
  padding: 0px;
  &:first-child { margin-left: 0; }

@@ -131,7 +131,8 @@ def update_figure(selected_strength, selected_ingredient):
             y=[y0, y1, None],
             text=[edge[2]['value']],
             line=go.Line(width=edge[2]['value'],
-                         color='rgba(100, 0, 0, 0.4)',
+                         #color='rgba(100, 0, 0, 0.4)',
+                         color='rgb(45, 175, 78, 0.4)',
                          ),#dash="dot"),
             hoverinfo='text',
             mode='lines',
@@ -162,7 +163,7 @@ def update_figure(selected_strength, selected_ingredient):
         node_trace['y'].append(y)
         node_trace['text'].append(node)
         if node == selected_ingredient:
-            colorarray.append('red')
+            colorarray.append("rgb(45, 175, 78)")
         else:
             colorarray.append('white')
 
@@ -208,12 +209,12 @@ def update_map(selected_ingredient):
             locations=df_map['CODE'],
             z=df_map[selected_ingredient],
             text=df_map['region'],
-            colorscale=[[0,"rgb(5, 10, 172)"],
-                          [0.35,"rgb(40, 60, 190)"],
-                          [0.5,"rgb(70, 100, 245)"],
-                          [0.6,"rgb(90, 120, 245)"],
-                          [0.7,"rgb(106, 137, 247)"],
-                          [1,"rgb(220, 220, 220)"]],
+            colorscale=[[0,"rgb(238,238,238)"],
+                        [0.35,"rgb(78,144,190)"],
+                        [0.5,"rgb(118,167,202)"],
+                        [0.6,"rgb(158,191,214)"],
+                        [0.7,"rgb(198,214,226)"],
+                        [1,"rgb(38,120,178)"]],
             autocolorscale=False,
             reversescale=True,
             marker=dict(
