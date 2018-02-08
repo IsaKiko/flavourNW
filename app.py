@@ -91,7 +91,7 @@ def update_bargraph(selected_ingredient):
     return {
         'data': bar_traces,
         'layout': go.Layout(
-            margin=dict(t=50,l=150),
+            margin=dict(l=150),
             autosize=True,
             titlefont=dict(size=16),
             showlegend=False,
@@ -230,7 +230,6 @@ def update_map(selected_ingredient):
     )]
     layout = dict(
         geo=dict(
-            margin=dict(t=50),
             showframe=False,
             showcoastlines=False,
             projection=dict(
@@ -243,7 +242,6 @@ def update_map(selected_ingredient):
             l=0,
             r=0,
             b=0,
-            t=0,
             pad=0
         ),
     )
