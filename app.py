@@ -20,7 +20,7 @@ for i in ingredients:
 app = dash.Dash()
 
 # Import CSS
-app.css.append_css({'external_url':'https://cdn.rawgit.com/IsaKiko/flavourNW/921dd7ef/style.css'})
+app.css.append_css({'external_url':'https://cdn.rawgit.com/IsaKiko/flavourNW/8808521a/style.css'})
 app.layout = html.Div([
     # Header
     html.Div(
@@ -85,15 +85,18 @@ app.layout = html.Div([
 def update_bargraph(selected_ingredient):
     bar_traces = []
     bar_traces.append(go.Bar(
-        x = list(df_regiondata['Cuisine']),
-        y = df_regiondata[selected_ingredient]))
+        y = list(df_regiondata['Cuisine']),
+        x = df_regiondata[selected_ingredient],
+        orientation="h"))
     return {
         'data': bar_traces,
         'layout': go.Layout(
+            margin=dict(t=50,l=150),
             autosize=True,
             titlefont=dict(size=16),
             showlegend=False,
-            hovermode='closest'
+            hovermode='closest',
+            title="Ingredient popularity"
         )
     }
 
@@ -177,6 +180,7 @@ def update_figure(selected_strength, selected_ingredient):
     return {
         'data': traces,
         'layout': go.Layout(
+            title="Ingredients combinations",
             autosize=True,
             height=1000,
             titlefont=dict(size=16),
@@ -226,12 +230,14 @@ def update_map(selected_ingredient):
     )]
     layout = dict(
         geo=dict(
+            margin=dict(t=50),
             showframe=False,
             showcoastlines=False,
             projection=dict(
                 type='Orthographic'
             )
         ),
+        title="Ingredient popularity map",
         autosize=True,
         margin=go.Margin(
             l=0,
