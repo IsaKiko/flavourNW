@@ -5,6 +5,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
+from sklearn import preprocessing
 
 df_original = pandas.read_csv("connection_strength_norm.csv")
 df_original = df_original[df_original.value >= 0.2]
@@ -124,6 +125,34 @@ def update_bargraph(selected_ingredient):
 def update_figure(selected_strength, selected_ingredient):
 
     df = df_original[df_original.value >= selected_strength]
+
+    """
+    #print df.value
+    # Scaling values from 1 to 4
+    #min_max_scaler = preprocessing.MinMaxScaler()
+    #x_scaled min_max_scaler.fit_transform(df.value.values.astype(float))
+    # Create x, where x the 'scores' column's values as floats
+    x = df[['value']].values.astype(float)
+    # Create a minimum and maximum processor object
+    min_max_scaler = preprocessing.MinMaxScaler()
+    # Create an object to transform the data to fit minmax processor
+    x_scaled = min_max_scaler.fit_transform(x)
+    # Run the normalizer on the dataframe
+    df_normalized = pd.DataFrame(x_scaled)
+    """
+    #print df_normalized
+    #df.value = min_max_scaler.fit_transform(df.value)
+    #df.value = (4 -1) * df.value + 1
+
+    #x_norm = (20-1)*(df.value - df.value.min()) / (df.value.max() - df.value.min()) + 1
+    #df.value = x_norm
+
+    #df.value = np.log(df.value)
+
+    #df.value
+
+    #print df.value
+
     G = nx.convert_matrix.from_pandas_edgelist(df, 'ingredients', 'variable', edge_attr='value')
     pos = nx.spring_layout(G)
 
@@ -133,17 +162,30 @@ def update_figure(selected_strength, selected_ingredient):
         x=[],
         y=[],
         text=[],
-        line=go.Line(width=2, color='rgba(0, 0, 0, 0.4'),
+        line=go.Line(width=1, color='rgba(0, 0, 0, 0.4'),
         hoverinfo='text',
         mode='lines',
     )
-    for edge in G.edges(data=True):
+    for i, edge in enumerate(G.edges(data=True)):
+        #print edge[2]['value']
         if edge[2]['value'] > selected_strength:
             x0, y0 = pos[edge[0]]
             x1, y1 = pos[edge[1]]
             edge_trace['x'] += [x0, x1, None]
             edge_trace['y'] += [y0, y1, None]
             edge_trace['text'].append(edge[2]['value'])
+            #if i % 2 == 0:
+            #    edge_trace['line'] = go.Line(width=edge[2]['value'],
+            #                                 color='rgba(0, 0, 0, 0.4')
+            #else:
+            #    edge_trace['line'] = go.Line(width=4,
+            #                                 color='rgba(0, 0, 0, 0.4')
+            """
+            edge_trace['line'] = go.Line(width=edge[2]['value'],
+                                         color='rgba(0, 0, 0, 0.4')
+            """
+        #edge_trace['line'] = go.Line(width=100,
+        #                             color='rgba(0, 0, 0, 0.4')
 
     # Draw nodes
     colorarray = []
@@ -171,7 +213,7 @@ def update_figure(selected_strength, selected_ingredient):
         if node == selected_ingredient:
             colorarray.append('red')
         else:
-            colorarray.append('orange')
+            colorarray.append('white')
 
     traces.append(edge_trace)
     traces.append(node_trace)
@@ -187,7 +229,53 @@ def update_figure(selected_strength, selected_ingredient):
         )
     }
 
+@app.callback(
+    dash.dependencies.Output('map-graph', 'figure'),
+    [dash.dependencies.Input('ing_dd', 'value')]
+    )
+def update_map(selected_ingredient):
+    df_map = pandas.read_csv('occurrences_per_cuisine_countries.csv')
 
+    data = [ dict(
+            type='choropleth',
+            locations=df_map['CODE'],
+            z=df_map[selected_ingredient],
+            text=df_map['region'],
+            colorscale=[[0,"rgb(5, 10, 172)"],
+                          [0.35,"rgb(40, 60, 190)"],
+                          [0.5,"rgb(70, 100, 245)"],
+                          [0.6,"rgb(90, 120, 245)"],
+                          [0.7,"rgb(106, 137, 247)"],
+                          [1,"rgb(220, 220, 220)"]],
+            autocolorscale=False,
+            reversescale=True,
+            marker=dict(
+                line=dict(
+                    color='rgb(180,180,180)',
+                    width=0.5
+                )),
+            colorbar=dict(
+                autotick=False,
+                title='Number of recipes'),
+    )]
+    layout = dict(
+        title="Popularity of " + selected_ingredient,
+        geo=dict(
+            showframe=False,
+            showcoastlines=False,
+            projection=dict(
+                type='Orthographic'
+            )
+        )
+    )
+    return{
+        'data': data,
+        'layout': layout
+    }
+
+
+
+'''
 @app.callback(
     dash.dependencies.Output('map-graph', 'figure'),
     [dash.dependencies.Input('ing_dd', 'value')]
@@ -273,7 +361,7 @@ def update_map(selected_ingredient):
             hovermode='closest'
         )
     }
-
+'''
 
 
 if __name__ == '__main__':
