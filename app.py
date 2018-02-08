@@ -5,8 +5,6 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
-from sklearn import preprocessing
-from matplotlib import pyplot as plt
 
 df_original = pandas.read_csv("connection_strength_norm.csv")
 df_original = df_original[df_original.value >= 0.2]
@@ -22,13 +20,14 @@ for i in ingredients:
 app = dash.Dash()
 
 # Import CSS
-app.css.append_css({'external_url':'https://rawgit.com/IsaKiko/flavourNW/cf0b59ae74fe68ad17127d59cf23af947c4a8601/style.css'})
+app.css.append_css({'external_url':'https://rawgit.com/IsaKiko/flavourNW/92bfdb7ec6ca166d0bea9ae76a31ec8276cb0bc1/style.css'})
 app.layout = html.Div([
     # Header
     html.Div(
         html.H1('~A Dash Of Flavour~'),
          className="header"
     ),
+    html.H2('Select an ingredient...'),
     # Dropdown
     html.Div(
         dcc.Dropdown(
@@ -39,35 +38,38 @@ app.layout = html.Div([
         className="header",
         id='div1'
     ),
-    html.Section([
-        # Network Graph
-        html.Div([
-            dcc.Graph(
-                id='network-graph'
-            ),
-            # Slider
-            dcc.Slider(
-                id='strength-slider',
-                max=df_original['value'].max(),
-                value=df_original['value'].min(),
-                step=None,
-                marks={str(value): str(value) for value in df_original['value'].unique()}
-        )],
-            className='column',
-            id='div2'
+    # Network Graph
+    html.Div([
+        # Slider
+        dcc.Slider(
+            id='strength-slider',
+            max=df_original['value'].max(),
+            value=df_original['value'].min(),
+            step=df_original['value'].max()/100
+            #step=None,
+            #marks={str(value): str(value) for value in df_original['value'].unique()}
         ),
-        html.Div([
+        dcc.Graph(
+            id='network-graph'
+        )],
+        id='div2'
+    ),
+    html.Section([
+        html.Div(
             # Map Graph
             dcc.Graph(
                 id='map-graph'
             ),
-            html.Br(),
+            className='column',
+            id='div3'
+        ),
+        html.Div(
             # Bar Graph
             dcc.Graph(
                 id='bar-graph'
-            )],
+            ),
             className="column",
-            id='div3'
+            id='div4'
         )
         ],
         className="columns"
@@ -91,7 +93,6 @@ def update_bargraph(selected_ingredient):
             autosize=True,
             titlefont=dict(size=16),
             showlegend=False,
-            height=1000,
             hovermode='closest'
         )
     }
@@ -128,9 +129,7 @@ def update_figure(selected_strength, selected_ingredient):
             y=[y0, y1, None],
             text=[edge[2]['value']],
             line=go.Line(width=edge[2]['value'],
-                         color=('rgb(100, 27, 0'),
-                         dash="dot"
-                         ),
+                         color='rgba(0, 0, 0, 0.4'),
             hoverinfo='text',
             mode='lines',
         ))
@@ -175,26 +174,20 @@ def update_figure(selected_strength, selected_ingredient):
         'data': traces,
         'layout': go.Layout(
             autosize=True,
+            height=1000,
             titlefont=dict(size=16),
             showlegend=False,
-            height=1000,
             hovermode='closest',
             xaxis=dict(
-                autorange=True,
                 showgrid=False,
                 zeroline=False,
                 showline=False,
-                autotick=True,
-                ticks='',
                 showticklabels=False
             ),
             yaxis=dict(
-                autorange=True,
                 showgrid=False,
                 zeroline=False,
                 showline=False,
-                autotick=True,
-                ticks='',
                 showticklabels=False
             )
         )
@@ -207,7 +200,6 @@ def update_figure(selected_strength, selected_ingredient):
     )
 def update_map(selected_ingredient):
     df_map = pandas.read_csv('choropleth_norm.csv')
-
     data = [ dict(
             type='choropleth',
             locations=df_map['CODE'],
@@ -220,25 +212,29 @@ def update_map(selected_ingredient):
                           [0.7,"rgb(106, 137, 247)"],
                           [1,"rgb(220, 220, 220)"]],
             autocolorscale=False,
-            reversescale=True,
             marker=dict(
                 line=dict(
                     color='rgb(180,180,180)',
                     width=0.5
                 )),
-            colorbar=dict(
-                autotick=False,
-                title='Number of recipes'),
+            showscale=False
     )]
     layout = dict(
-        #title="Popularity of " + selected_ingredient,
         geo=dict(
             showframe=False,
             showcoastlines=False,
             projection=dict(
                 type='Orthographic'
             )
-        )
+        ),
+        autosize=True,
+        margin=go.Margin(
+            l=0,
+            r=0,
+            b=0,
+            t=0,
+            pad=0
+        ),
     )
     return{
         'data': data,
