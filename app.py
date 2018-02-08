@@ -6,6 +6,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 from sklearn import preprocessing
+from matplotlib import pyplot as plt
 
 df_original = pandas.read_csv("connection_strength_norm.csv")
 df_original = df_original[df_original.value >= 0.2]
@@ -127,7 +128,9 @@ def update_figure(selected_strength, selected_ingredient):
             y=[y0, y1, None],
             text=[edge[2]['value']],
             line=go.Line(width=edge[2]['value'],
-                         color='rgba(0, 0, 0, 0.4'),
+                         color=('rgb(100, 27, 0'),
+                         dash="dot"
+                         ),
             hoverinfo='text',
             mode='lines',
         ))
@@ -175,16 +178,35 @@ def update_figure(selected_strength, selected_ingredient):
             titlefont=dict(size=16),
             showlegend=False,
             height=1000,
-            hovermode='closest'
+            hovermode='closest',
+            xaxis=dict(
+                autorange=True,
+                showgrid=False,
+                zeroline=False,
+                showline=False,
+                autotick=True,
+                ticks='',
+                showticklabels=False
+            ),
+            yaxis=dict(
+                autorange=True,
+                showgrid=False,
+                zeroline=False,
+                showline=False,
+                autotick=True,
+                ticks='',
+                showticklabels=False
+            )
         )
     }
+
 
 @app.callback(
     dash.dependencies.Output('map-graph', 'figure'),
     [dash.dependencies.Input('ing_dd', 'value')]
     )
 def update_map(selected_ingredient):
-    df_map = pandas.read_csv('occurrences_per_cuisine_countries.csv')
+    df_map = pandas.read_csv('choropleth_norm.csv')
 
     data = [ dict(
             type='choropleth',
@@ -209,7 +231,7 @@ def update_map(selected_ingredient):
                 title='Number of recipes'),
     )]
     layout = dict(
-        title="Popularity of " + selected_ingredient,
+        #title="Popularity of " + selected_ingredient,
         geo=dict(
             showframe=False,
             showcoastlines=False,
