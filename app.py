@@ -107,11 +107,13 @@ def update_figure(selected_strength, selected_ingredient):
 
     df = df_original[df_original.value >= selected_strength]
 
-    x_norm = (4-1)*(df.value - df.value.min()) / (df.value.max() - df.value.min()) + 1
+    x_norm = (12-1)*(df.value - df.value.min()) / (df.value.max() - df.value.min())
     df.value = x_norm
 
     G = nx.convert_matrix.from_pandas_edgelist(df, 'ingredients', 'variable', edge_attr='value')
     pos = nx.shell_layout(G)
+    #pos = nx.spectral_layout(G)
+    #pos = nx.circular_layout(G)
 
     #pos = nx.graphviz_layout(G)
     #pos = nx.draw_circular(G)
@@ -129,7 +131,8 @@ def update_figure(selected_strength, selected_ingredient):
             y=[y0, y1, None],
             text=[edge[2]['value']],
             line=go.Line(width=edge[2]['value'],
-                         color='rgba(0, 0, 0, 0.4'),
+                         color='rgba(100, 0, 0, 0.4)',
+                         ),#dash="dot"),
             hoverinfo='text',
             mode='lines',
         ))
@@ -148,7 +151,7 @@ def update_figure(selected_strength, selected_ingredient):
             color=colorarray,
             line=dict(
                 width=2,
-                color='rgba(0, 0, 0, .2)'
+                color='rgba(0, 0, 0, 0.4)'
             )
         )
     )
