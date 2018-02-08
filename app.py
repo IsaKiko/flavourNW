@@ -20,7 +20,7 @@ for i in ingredients:
 app = dash.Dash()
 
 # Import CSS
-app.css.append_css({'external_url':'https://rawgit.com/IsaKiko/flavourNW/92bfdb7ec6ca166d0bea9ae76a31ec8276cb0bc1/style.css'})
+app.css.append_css({'external_url':'https://cdn.rawgit.com/IsaKiko/flavourNW/5023b573/style.css'})
 app.layout = html.Div([
     # Header
     html.Div(

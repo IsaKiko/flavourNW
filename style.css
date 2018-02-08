@@ -30,6 +30,12 @@ header {
  &:last-child { margin-right: 0; }
 
 }
+
+.hovertext text{
+  font-family: Helvetica !important;
+  font-size:13px !important;
+}
+
 footer {
  padding: 0 15px;
 }
