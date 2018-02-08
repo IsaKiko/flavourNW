@@ -180,7 +180,7 @@ def update_figure(selected_strength, selected_ingredient):
     return {
         'data': traces,
         'layout': go.Layout(
-            title="Ingredients combinations",
+            title="Ingredient combinations",
             autosize=True,
             height=1000,
             titlefont=dict(size=16),
