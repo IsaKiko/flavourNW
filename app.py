@@ -27,7 +27,7 @@ app.layout = html.Div([
         html.H1('~A Dash Of Flavour~'),
          className="header"
     ),
-    html.H2('Select an ingredient...'),
+    html.H3('Select an ingredient...'),
     # Dropdown
     html.Div(
         dcc.Dropdown(
@@ -235,6 +235,12 @@ def update_map(selected_ingredient):
             projection=dict(
                 type='Orthographic'
             )
+        ),
+        xaxis=dict(
+            fixedrange=True
+        ),
+        yaxis=dict(
+            fixedrange=True
         ),
         title="Ingredient popularity map",
         autosize=True,
