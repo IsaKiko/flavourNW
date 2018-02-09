@@ -220,7 +220,7 @@ def update_map(selected_ingredient):
                         [0.7,"rgb(78,144,190)"],
                         [1,"rgb(38,120,178)"]],
             autocolorscale=False,
-            reversescale=True,
+            #reversescale=True,
             marker=dict(
                 line=dict(
                     color='rgb(180,180,180)',
