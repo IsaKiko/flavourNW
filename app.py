@@ -242,6 +242,7 @@ def update_map(selected_ingredient):
         yaxis=dict(
             fixedrange=True
         ),
+        staticplot=True,
         title="Ingredient popularity map",
         autosize=True,
         margin=go.Margin(
